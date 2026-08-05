@@ -4,76 +4,58 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodels="clr-namespace:MAUIAppTest.ViewModels"
              xmlns:models="clr-namespace:MAUIAppTest.Models"
+             x:Name="EmployeePageRoot"
              x:Class="MAUIAppTest.EmployeePage"
              x:DataType="viewmodels:EmployeeViewModel"
              Title="Employee Registration">
 
-        <Grid RowDefinitions="Auto, Auto, *" Padding="15" RowSpacing="15">
+    <Grid RowDefinitions="Auto, Auto, *" Padding="15" RowSpacing="15">
 
-            <!-- Preferences Banner Overlay Tracker -->
-            <Label Grid.Row="0" Text="{Binding LastSyncInfo}" FontAttributes="Italic" TextColor="Gray" HorizontalOptions="Center"/>
+        <!-- Preferences Banner Overlay Tracker -->
+        <Label Grid.Row="0" Text="{Binding LastSyncInfo}" FontAttributes="Italic" TextColor="Gray" HorizontalOptions="Center"/>
 
-            <!-- Registration Entry Form -->
-            <VerticalStackLayout Grid.Row="1" Spacing="10" Padding="10" BackgroundColor="#F0F0F0">
-                <Entry Placeholder="Full Name" Text="{Binding FullName, Mode=TwoWay}" />
-                <Entry Placeholder="Email Address" Text="{Binding Email, Mode=TwoWay}" Keyboard="Email" />
-                <Entry Placeholder="Department" Text="{Binding Department, Mode=TwoWay}" />
+        <!-- Registration Entry Form -->
+        <VerticalStackLayout Grid.Row="1" Spacing="10" Padding="10" BackgroundColor="Orange">
+            <Entry Placeholder="Full Name" Text="{Binding FullName, Mode=TwoWay}" />
+            <Entry Placeholder="Email Address" Text="{Binding Email, Mode=TwoWay}" Keyboard="Email" />
+            <Entry Placeholder="Department" Text="{Binding Department, Mode=TwoWay}" />
 
-                <HorizontalStackLayout Spacing="10" HorizontalOptions="End">
-                    <Button Text="Clear" Command="{Binding ClearFormCommand}" Visual="Default" />
-                    <Button Text="Save Employee" Command="{Binding SaveCommand}" BackgroundColor="Purple" TextColor="White" />
-                </HorizontalStackLayout>
-            </VerticalStackLayout>
+            <HorizontalStackLayout Spacing="10" HorizontalOptions="End">
+                <Button Text="Clear" Command="{Binding ClearFormCommand}" Visual="Default">
+                </Button>
+                <Button Text="Save Employee" Command="{Binding SaveCommand}" BackgroundColor="Purple" TextColor="White">                    
+                </Button>
+            </HorizontalStackLayout>
+        </VerticalStackLayout>
 
-            <!-- Employee Collection Render View -->
-            <CollectionView Grid.Row="2" ItemsSource="{Binding Employees}">
-                <CollectionView.ItemTemplate>
+        <!-- Employee Collection Render View -->
+        <CollectionView Grid.Row="2" ItemsSource="{Binding Employees}">
+            <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="models:Employee">
-                        <Grid ColumnDefinitions="*, Auto" Padding="10">
-                            <VerticalStackLayout Grid.Column="0">
-                                <Label Text="{Binding FullName}" FontAttributes="Bold" FontSize="16"/>
-                                <Label Text="{Binding Email}" TextColor="DimGray"/>
-                                <Label Text="{Binding Department}" FontSize="12" TextColor="Purple"/>
-                            </VerticalStackLayout>
-
-                            <HorizontalStackLayout Grid.Column="1" Spacing="5" VerticalOptions="Center">
-                                <!-- Tap execution linking back via relative reference source ancestor path mapping -->
-                                <!--<Button Text="Edit" 
-                                    Command="{Binding SelectForEditCommand, AncestorType ={x:Type viewmodels:MAUIAppTest.ViewModels.EmployeeViewModel}}" 
-                                    CommandParameter="{Binding .}" HeightRequest="35"/>
-                                <Button Text="X" 
-                                    Command="{Binding DeleteCommand, AncestorType={x:Type viewmodels:MAUIAppTest.ViewModels.EmployeeModel}}" 
-                                    CommandParameter="{Binding .}" BackgroundColor="Red" TextColor="White" HeightRequest="35"/>-->
-
-                            <!--<Button
-                                HeightRequest="35"
-                                Text="Edit"
-                                Command="{Binding Source={x:Reference EmployeePageRoot}, Path=BindingContext.SelectForEditCommand}"
-                                CommandParameter="{Binding .}" />
-
-                            <Button
-                                HeightRequest="35"
-                                BackgroundColor="Red"
-                                Text="X"
-                                TextColor="White"
-                                Command="{Binding Source={x:Reference EmployeePageRoot}, Path=BindingContext.DeleteCommand}"
-                                CommandParameter="{Binding .}" />-->
-
+                    <Grid ColumnDefinitions="*, Auto" Padding="10">
+                        <VerticalStackLayout Grid.Column="0">
+                            <Label Text="{Binding FullName}" FontAttributes="Bold" FontSize="16"/>
+                            <Label Text="{Binding Email}" TextColor="DimGray"/>
+                            <Label Text="{Binding Department}" FontSize="12" TextColor="Purple"/>
+                        </VerticalStackLayout>
+                        <HorizontalStackLayout Grid.Column="1" Spacing="5" VerticalOptions="Center">
+                            <!-- Tap execution linking back via relative reference source ancestor path mapping -->
                             <Button Text="Edit"
-                                HeightRequest="35"                               
-                                CommandParameter="{Binding .}" />
-                            <!--Command="{Binding Source={x:Reference EmployeePage}, Path=BindingContext.SelectForEditCommand}"
-                            Command="{Binding Source={x:Reference EmployeePage}, Path=BindingContext.DeleteCommand}"-->
-                            <Button Text="X"
-                                HeightRequest="35"
-                                BackgroundColor="Red"
-                                TextColor="White"                                
-                                CommandParameter="{Binding .}" />
+                                 HeightRequest="35"
+                                 Command="{Binding Source={x:Reference EmployeePageRoot}, Path=BindingContext.SelectForEditCommand}"
+                                 CommandParameter="{Binding .}"></Button>
 
+                            <Button Text="X"
+                                 HeightRequest="35"
+                                 BackgroundColor="Red"
+                                 TextColor="White"
+                                 Command="{Binding Source={x:Reference EmployeePageRoot}, Path=BindingContext.DeleteCommand}"
+                                    CommandParameter="{Binding .}"></Button>
+                                 
                         </HorizontalStackLayout>
-                        </Grid>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-        </Grid>
-    </ContentPage>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>
