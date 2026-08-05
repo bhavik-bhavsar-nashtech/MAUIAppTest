@@ -19,6 +19,15 @@ namespace MAUIAppTest
     		builder.Logging.AddDebug();
 #endif
 
+            // 1. Core Platform Service Registration
+            builder.Services.AddSingleton<Services.DatabaseService>();
+
+            // 2. MVVM Processing Engine Registration
+            builder.Services.AddTransient<ViewModels.EmployeeViewModel>();
+
+            // 3. UI Presentation Layer Registration
+            builder.Services.AddTransient<EmployeePage>();
+
             return builder.Build();
         }
     }
