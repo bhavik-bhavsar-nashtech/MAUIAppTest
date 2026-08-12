@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using Microsoft.Maui.LifecycleEvents;
 
 namespace MAUIAppTest
 {
@@ -27,6 +28,19 @@ namespace MAUIAppTest
 
             // 3. UI Presentation Layer Registration
             builder.Services.AddTransient<EmployeePage>();
+
+            builder.ConfigureLifecycleEvents(events =>
+            {
+#if ANDROID
+                events.AddAndroid(android =>
+                {
+                    android.OnResume(activity =>
+                    {
+                        System.Diagnostics.Debug.WriteLine("Android Activity Resumed");
+                    });
+                });
+#endif
+            });
 
             return builder.Build();
         }
