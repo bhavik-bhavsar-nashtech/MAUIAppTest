@@ -14,7 +14,13 @@ namespace MAUIAppTest
             _dbService = dbService;
             _employeePage = employeePage;
 
-            MainPage = _employeePage;
+            //MainPage = _employeePage;
+            //var NavPage = new NavigationPage(_employeePage);
+            var NavPage = new NavigationPage(new DemoFlyOutPage(dbService));
+            NavPage.BarBackground = Colors.Green;
+            NavPage.BarTextColor = Colors.Red;
+
+            MainPage = NavPage;
         }
 
         protected override void OnStart()

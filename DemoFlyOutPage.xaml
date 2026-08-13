@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<FlyoutPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MAUIAppTest.DemoFlyOutPage"
+             Title="DemoFlyOutPage">
+    <FlyoutPage.Flyout>
+        <!--<ContentPage Title="Master Page">
+            <Label
+            Text="Welcome to Flyout Master Page content!"
+            VerticalOptions="Center" 
+            HorizontalOptions="Center" />
+        </ContentPage>-->
+        <ContentPage Title="Menu">
+            <VerticalStackLayout
+                Padding="20"
+                Spacing="20">
+
+                <Label
+                    Text="Welcome to Flyout MENU"
+                    HorizontalOptions="Center" />
+
+                <Button
+                    Text="Go to Demo Page"
+                    Clicked="Button_Clicked" />
+
+            </VerticalStackLayout>
+        </ContentPage>
+    </FlyoutPage.Flyout>
+    <FlyoutPage.Detail>
+        <!--<ContentPage Title="Detail Page">
+            <VerticalStackLayout Padding="20"
+                Spacing="20"
+                VerticalOptions="Center">
+                <Label
+    Text="Welcome to Flyout Detail Page content!"
+    VerticalOptions="Center" 
+    HorizontalOptions="Center" />
+                <Button Text="Go to Demo Page" Clicked="Button_Clicked"></Button>
+            </VerticalStackLayout>
+        </ContentPage>-->
+
+        <NavigationPage />
+    </FlyoutPage.Detail>
+</FlyoutPage>

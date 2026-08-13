@@ -8,7 +8,7 @@ namespace MAUIAppTest.ViewModels;
 
 public partial class EmployeeViewModel : ObservableObject
 {
-    private readonly DatabaseService _dbService;
+    public readonly DatabaseService _dbService;
 
     public ObservableCollection<Employee> Employees { get; set; } = [];
 
