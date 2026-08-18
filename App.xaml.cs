@@ -22,12 +22,15 @@ namespace MAUIAppTest
 
             MainPage = NavPage;
             //MainPage = new DemoTabedPage();
+
+            // Fire-and-forget apply saved theme at construction (will not block startup)
+            _ = ApplySavedThemeAsync();
         }
 
         protected override void OnStart()
         {
             base.OnStart();
-
+            // ensure theme applied again on start
             // Warm the DB and refresh UI when the app starts
             if (_employeePage.BindingContext is ViewModels.EmployeeViewModel vm)
             {
@@ -36,12 +39,14 @@ namespace MAUIAppTest
             }
 
             Preferences.Default.Set("App_Last_Started", DateTime.UtcNow.ToString("O"));
-        }
+            // ensure theme applied again on start
+            _ = ApplySavedThemeAsync();
 
+        }
         protected override void OnSleep()
         {
             base.OnSleep();
-
+            // no-op here: preferences are persisted to sqlite as changes happen
             // Persist a simple timestamp when app goes to background
             Preferences.Default.Set("App_Last_Slept", DateTime.UtcNow.ToString("O"));
 
@@ -55,6 +60,8 @@ namespace MAUIAppTest
         protected override void OnResume()
         {
             base.OnResume();
+            // re-apply saved theme and refresh data if desired
+            _ = ApplySavedThemeAsync();
 
             // Refresh data when the app resumes
             if (_employeePage.BindingContext is ViewModels.EmployeeViewModel vm)
@@ -63,6 +70,21 @@ namespace MAUIAppTest
             }
 
             Preferences.Default.Set("App_Last_Resumed", DateTime.UtcNow.ToString("O"));
+        }
+
+        private async Task ApplySavedThemeAsync()
+        {
+            var theme = await _dbService.GetPreferenceAsync("App_Theme");
+            if (string.IsNullOrWhiteSpace(theme)) return;
+
+            // Ensure UI update on main thread
+            Application.Current?.Dispatcher.Dispatch(() =>
+            {
+                if (Enum.TryParse<AppTheme>(theme, ignoreCase: true, out var parsed))
+                    Application.Current.UserAppTheme = parsed;
+                else
+                    Application.Current.UserAppTheme = AppTheme.Unspecified;
+            });
         }
     }
 }
