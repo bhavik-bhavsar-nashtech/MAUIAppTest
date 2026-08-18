@@ -20,9 +20,4 @@ public partial class DemoPage : ContentPage
         await Navigation.PushAsync(new EmployeePage(new ViewModels.EmployeeViewModel(_dbService)));
 		//await Navigation.PushAsync(_employeePage);
     }
-
-    private async void btnGotoFlyoutPage_Clicked(object sender, EventArgs e)
-    {
-        await Navigation.PushAsync(new FlyoutPage());
-    }
 }

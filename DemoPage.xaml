@@ -10,6 +10,5 @@
             HorizontalOptions="Center" />
         <Entry Text="Empty" TextColor="White"></Entry>
         <Button Text="Click" Clicked="Button_Clicked"></Button>
-        <Button Text="Click To Flyout Page" x:Name="btnGotoFlyoutPage" Clicked="btnGotoFlyoutPage_Clicked"></Button>
     </VerticalStackLayout>
 </ContentPage>
