@@ -7,51 +7,94 @@
              x:Name="EmployeePageRoot"
              x:Class="MAUIAppTest.EmployeePage"
              x:DataType="viewmodels:EmployeeViewModel"
-             Title="Employee Registration">
-    
+             Title="Employee Registration"
+             Padding="{OnIdiom Phone=10, Tablet=20, Desktop=30}">
 
-    <Grid RowDefinitions="Auto, Auto, *" Padding="15" RowSpacing="15">
-        <!-- Preferences Banner Overlay Tracker -->
-        <Label Grid.Row="0" Text="{Binding LastSyncInfo}" FontAttributes="Italic" TextColor="Gray" HorizontalOptions="Center"/>
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <!-- Platform-specific form background -->            
+            <OnPlatform x:Key="FormBackgroundColor"
+            x:TypeArguments="Color">
+                <On Platform="Android" Value="#F7F7F7" />
+                <On Platform="iOS" Value="#FFFFFF" />
+                <On Platform="WinUI" Value="#EFEFEF" />
+            </OnPlatform>
 
-        <!-- Registration Entry Form -->
-        <VerticalStackLayout Grid.Row="1" Spacing="10" Padding="10" BackgroundColor="Orange">
-            <Entry Placeholder="Full Name" Text="{Binding FullName, Mode=TwoWay}" />
-            <Entry Placeholder="Email Address" Text="{Binding Email, Mode=TwoWay}" Keyboard="Email" />
-            <Entry Placeholder="Department" Text="{Binding Department, Mode=TwoWay}" />
+            <!-- Idiom-based font sizes -->
+            <OnIdiom x:Key="TitleFontSize" x:TypeArguments="x:Double"
+                     Phone="14"
+                     Tablet="18"
+                     Desktop="20" />
 
-            <HorizontalStackLayout Spacing="10" HorizontalOptions="End">
-                <Button Text="Clear" Command="{Binding ClearFormCommand}" Visual="Default">
-                </Button>
-                <Button Text="Save Employee" Command="{Binding SaveCommand}" BackgroundColor="Purple" TextColor="White">                    
-                </Button>
-            </HorizontalStackLayout>
-        </VerticalStackLayout>
+            <OnIdiom x:Key="FieldFontSize" x:TypeArguments="x:Double"
+                     Phone="12"
+                     Tablet="16"
+                     Desktop="18" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
 
-        <!-- Employee Collection Render View -->
+    <Grid RowDefinitions="Auto, Auto, *" ColumnDefinitions="*" RowSpacing="15">
+        <!-- Banner -->
+        <Label Grid.Row="0"
+               Text="{Binding LastSyncInfo}"
+               FontAttributes="Italic"
+               TextColor="Gray"
+               HorizontalOptions="Center"
+               FontSize="{StaticResource TitleFontSize}" />
+
+        <!-- Form: Orientation changes by idiom (phone = vertical, tablet/desktop = horizontal) -->
+        <StackLayout Grid.Row="1"
+                     Spacing="10"
+                     Padding="10"
+                     BackgroundColor="{StaticResource FormBackgroundColor}"
+                     Orientation="{OnIdiom Phone=Vertical, Tablet=Horizontal, Desktop=Horizontal}">
+
+            <!-- When horizontal, use two columns: left = inputs, right = actions (wrap with StackLayout) -->
+            <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="CenterAndExpand" Spacing="4">
+                <Entry Placeholder="Full Name" Text="{Binding FullName, Mode=TwoWay}"
+                       FontSize="{StaticResource FieldFontSize}" />
+                <Entry Placeholder="Email Address" Text="{Binding Email, Mode=TwoWay}" Keyboard="Email"
+                       FontSize="{StaticResource FieldFontSize}" />
+                <Entry Placeholder="Department" Text="{Binding Department, Mode=TwoWay}"
+                       FontSize="{StaticResource FieldFontSize}" />
+            </StackLayout>
+
+            <!-- Action column — when idiom is vertical it sits below; when horizontal it sits to the right -->
+            <StackLayout HorizontalOptions="End" Spacing="10" Orientation="{OnIdiom Phone=Horizontal, Tablet=Vertical, Desktop=Horizontal}">
+                <Button Text="Clear" Command="{Binding ClearFormCommand}" Visual="Default" />
+                <Button Text="Save Employee" Command="{Binding SaveCommand}" BackgroundColor="Purple" TextColor="White" />
+            </StackLayout>
+        </StackLayout>
+
+        <!-- CollectionView: uses GridItemsLayout with Span set by idiom (phone=1, tablet=2, desktop=3) -->
         <CollectionView Grid.Row="2" ItemsSource="{Binding Employees}">
+            <CollectionView.ItemsLayout>
+                <GridItemsLayout Orientation="Vertical" Span="{OnIdiom Phone=1, Tablet=2, Desktop=3}" />
+            </CollectionView.ItemsLayout>
+
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="models:Employee">
                     <Grid ColumnDefinitions="*, Auto" Padding="10">
                         <VerticalStackLayout Grid.Column="0">
-                            <Label Text="{Binding FullName}" FontAttributes="Bold" FontSize="16"/>
-                            <Label Text="{Binding Email}" TextColor="DimGray"/>
-                            <Label Text="{Binding Department}" FontSize="12" TextColor="Purple"/>
+                            <Label Text="{Binding FullName}" FontAttributes="Bold"
+                                   FontSize="{OnIdiom Phone=14, Tablet=16, Desktop=18}" />
+                            <Label Text="{Binding Email}" TextColor="DimGray"
+                                   FontSize="{OnIdiom Phone=12, Tablet=14, Desktop=16}" />
+                            <Label Text="{Binding Department}" FontSize="{OnIdiom Phone=12, Tablet=14, Desktop=16}"
+                                   TextColor="Purple" />
                         </VerticalStackLayout>
-                        <HorizontalStackLayout Grid.Column="1" Spacing="5" VerticalOptions="Center">
-                            <!-- Tap execution linking back via relative reference source ancestor path mapping -->
-                            <Button Text="Edit"
-                                 HeightRequest="35"
-                                 Command="{Binding Source={x:Reference EmployeePageRoot}, Path=BindingContext.SelectForEditCommand}"
-                                 CommandParameter="{Binding .}"></Button>
 
+                        <HorizontalStackLayout Grid.Column="1" Spacing="5" VerticalOptions="Center">
+                            <Button Text="Edit"
+                                    HeightRequest="35"
+                                    Command="{Binding Source={x:Reference EmployeePageRoot}, Path=BindingContext.SelectForEditCommand}"
+                                    CommandParameter="{Binding .}" />
                             <Button Text="X"
-                                 HeightRequest="35"
-                                 BackgroundColor="Red"
-                                 TextColor="White"
-                                 Command="{Binding Source={x:Reference EmployeePageRoot}, Path=BindingContext.DeleteCommand}"
-                                    CommandParameter="{Binding .}"></Button>
-                                 
+                                    HeightRequest="35"
+                                    BackgroundColor="Red"
+                                    TextColor="White"
+                                    Command="{Binding Source={x:Reference EmployeePageRoot}, Path=BindingContext.DeleteCommand}"
+                                    CommandParameter="{Binding .}" />
                         </HorizontalStackLayout>
                     </Grid>
                 </DataTemplate>
