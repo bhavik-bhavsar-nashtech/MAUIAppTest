@@ -12,13 +12,4 @@ public partial class EmployeePage : ContentPage
         InitializeComponent();
         BindingContext = viewModel;
     }
-
-    private async void Button_Clicked(object sender, EventArgs e)
-    {
-        if (BindingContext != null && BindingContext is ViewModels.EmployeeViewModel)
-        {
-            ViewModels.EmployeeViewModel vwModel = (ViewModels.EmployeeViewModel)BindingContext;
-            await Navigation.PushAsync(new DemoPage(vwModel._dbService));
-        }
-    }
 }

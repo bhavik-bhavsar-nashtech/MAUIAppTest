@@ -23,7 +23,11 @@
                     Text="Go to Demo Page"
                     Clicked="Button_Clicked" />
 
+                <FlexLayout>
+                    <Label Text="This is Flex Layout lable" HorizontalOptions="Center"></Label>
+                </FlexLayout>
             </VerticalStackLayout>
+            
         </ContentPage>
     </FlyoutPage.Flyout>
     <FlyoutPage.Detail>

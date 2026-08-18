@@ -20,7 +20,7 @@ namespace MAUIAppTest
             NavPage.BarBackground = Colors.Green;
             NavPage.BarTextColor = Colors.Red;
 
-            MainPage = NavPage;
+            MainPage = new DemoTabedPage();
         }
 
         protected override void OnStart()

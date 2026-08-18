@@ -11,7 +11,6 @@
     
 
     <Grid RowDefinitions="Auto, Auto, *" Padding="15" RowSpacing="15">
-        <Button Text="Go to Demo Page" Clicked="Button_Clicked"></Button>
         <!-- Preferences Banner Overlay Tracker -->
         <Label Grid.Row="0" Text="{Binding LastSyncInfo}" FontAttributes="Italic" TextColor="Gray" HorizontalOptions="Center"/>
 
