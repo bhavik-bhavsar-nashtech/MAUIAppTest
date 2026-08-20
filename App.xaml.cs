@@ -8,14 +8,16 @@ namespace MAUIAppTest
         private readonly EmployeePage _employeePage;
 
         private readonly LoginPage _loginPage;
+        private readonly Services.ErrorHandlingService _errorHandler;
 
-        public App(EmployeePage employeePage, Services.DatabaseService dbService, LoginPage loginPage)
+        public App(EmployeePage employeePage, Services.DatabaseService dbService, LoginPage loginPage, Services.ErrorHandlingService errorHandler)
         {
             InitializeComponent();
 
             _dbService = dbService;
             _employeePage = employeePage;
             _loginPage = loginPage;
+            _errorHandler = errorHandler;
 
             //MainPage = _employeePage;
             //var NavPage = new NavigationPage(_employeePage);
@@ -33,6 +35,23 @@ namespace MAUIAppTest
 
             // Fire-and-forget apply saved theme at construction (will not block startup)
             _ = ApplySavedThemeAsync();
+
+            // Global exception handlers for non-UI and UI thread exceptions
+            AppDomain.CurrentDomain.UnhandledException += async (s, e) =>
+            {
+                if (e.ExceptionObject is Exception ex)
+                    await _errorHandler.LogExceptionAsync(ex, "AppDomain.CurrentDomain.UnhandledException");
+            };
+
+            TaskScheduler.UnobservedTaskException += async (s, e) =>
+            {
+                await _errorHandler.LogExceptionAsync(e.Exception, "TaskScheduler.UnobservedTaskException");
+            };
+
+            // Platform-specific UI thread unhandled exceptions
+#if WINDOWS || ANDROID || IOS
+            Application.Current!.Dispatcher.Dispatch(() => { });
+#endif
         }
 
         protected override void OnStart()

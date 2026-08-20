@@ -23,6 +23,9 @@ namespace MAUIAppTest
             // 1. Core Platform Service Registration
             builder.Services.AddSingleton<Services.DatabaseService>();
 
+            // Global error handling service
+            builder.Services.AddSingleton<Services.ErrorHandlingService>();
+
             // 2. MVVM Processing Engine Registration
             builder.Services.AddTransient<ViewModels.EmployeeViewModel>();
 
