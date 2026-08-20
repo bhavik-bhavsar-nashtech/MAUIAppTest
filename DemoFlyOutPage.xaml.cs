@@ -51,6 +51,15 @@ public partial class DemoFlyOutPage : FlyoutPage
     
     private async void LogoutButton_Clicked(object sender, EventArgs e)
     {
-       
+        // Ensure UI update on the main thread and replace the app's MainPage
+        Application.Current?.Dispatcher.Dispatch(() =>
+        {
+            var nav = new NavigationPage(_loginPage)
+            {
+                BarBackground = Colors.Blue,
+                BarTextColor = Colors.White
+            };
+            Application.Current.MainPage = nav;
+        });
     }
 }
