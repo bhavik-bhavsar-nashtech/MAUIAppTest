@@ -7,7 +7,7 @@
              x:Name="EmployeePageRoot"
              x:Class="MAUIAppTest.EmployeePage"
              x:DataType="viewmodels:EmployeeViewModel"
-             Title="Employee Registration"
+             Title="Employee Management"
              Padding="{OnIdiom Phone=10, Tablet=20, Desktop=30}">
 
     <ContentPage.Resources>
@@ -52,9 +52,9 @@
             <!-- When horizontal, use two columns: left = inputs, right = actions (wrap with StackLayout) -->
             <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="CenterAndExpand" Spacing="4">
                 <Entry Placeholder="Full Name" Text="{Binding FullName, Mode=TwoWay}"
-                       FontSize="{StaticResource FieldFontSize}" />
+                       FontSize="{StaticResource FieldFontSize}" MaxLength="100" />
                 <Entry Placeholder="Email Address" Text="{Binding Email, Mode=TwoWay}" Keyboard="Email"
-                       FontSize="{StaticResource FieldFontSize}" />
+                        MaxLength="100" FontSize="{StaticResource FieldFontSize}" />
                 <Entry Placeholder="Department" Text="{Binding Department, Mode=TwoWay}"
                        FontSize="{StaticResource FieldFontSize}" />
             </StackLayout>

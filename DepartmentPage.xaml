@@ -8,14 +8,14 @@
              x:Class="MAUIAppTest.DepartmentPage"
              x:DataType="viewmodels:DepartmentViewModel"
              Title="Department Management"
-             Padding="{OnIdiom Phone=10, Tablet=20, Desktop=30}">
+             Padding="{OnIdiom Phone=5, Tablet=20, Desktop=30}">
 
-    <Grid RowDefinitions="Auto, Auto, *" ColumnDefinitions="*" RowSpacing="15">
+    <Grid RowDefinitions="Auto, Auto, *" ColumnDefinitions="*" RowSpacing="5">
         <!--<Label Grid.Row="0" Text="Manage Departments" FontAttributes="Bold" HorizontalOptions="Center" />-->
 
-        <StackLayout Grid.Row="1" Spacing="10" Padding="10">
-            <Entry Placeholder="Department Name" Text="{Binding DepartmentName, Mode=TwoWay}" />
-            <Editor Placeholder="Department Detail" AutoSize="TextChanges" Text="{Binding DepartmentDetail, Mode=TwoWay}" />
+        <StackLayout Grid.Row="1" Spacing="5" Padding="5">
+            <Entry Placeholder="Department Name" Text="{Binding DepartmentName, Mode=TwoWay}" MaxLength="100" />
+            <Editor Placeholder="Department Detail" AutoSize="TextChanges" Text="{Binding DepartmentDetail, Mode=TwoWay}" MaxLength="100" />
 
             <Picker Title="Department Head (optional)" ItemsSource="{Binding EmployeeNames}" SelectedItem="{Binding DepartmentHeadName, Mode=TwoWay}" />
 
