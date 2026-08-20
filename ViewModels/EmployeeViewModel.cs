@@ -12,6 +12,7 @@ public partial class EmployeeViewModel : ObservableObject
     public readonly DatabaseService _dbService;
 
     public ObservableCollection<Employee> Employees { get; set; } = [];
+    public ObservableCollection<string> DepartmentNames { get; set; } = new();
 
     // Fields annotated with ObservableProperty automatically produce public counterpart properties
     [ObservableProperty] private int _id;
@@ -27,6 +28,15 @@ public partial class EmployeeViewModel : ObservableObject
 
         // Kick off load operations
         _ = LoadEmployeesAsync();
+        _ = LoadDepartmentNamesAsync();
+    }
+
+    private async Task LoadDepartmentNamesAsync()
+    {
+        var departments = await _dbService.GetDepartmentsAsync();
+        DepartmentNames.Clear();
+        foreach (var d in departments)
+            DepartmentNames.Add(d.DepartmentName);
     }
 
     private async Task LoadMetadataAsync()

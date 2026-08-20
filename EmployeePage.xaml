@@ -55,8 +55,9 @@
                        FontSize="{StaticResource FieldFontSize}" MaxLength="100" />
                 <Entry Placeholder="Email Address" Text="{Binding Email, Mode=TwoWay}" Keyboard="Email"
                         MaxLength="100" FontSize="{StaticResource FieldFontSize}" />
-                <Entry Placeholder="Department" Text="{Binding Department, Mode=TwoWay}"
-                       FontSize="{StaticResource FieldFontSize}" />
+                <!--<Entry Placeholder="Department" Text="{Binding Department, Mode=TwoWay}"
+                       FontSize="{StaticResource FieldFontSize}" />-->
+                <Picker Title="Department (optional)" ItemsSource="{Binding DepartmentNames}" SelectedItem="{Binding Department, Mode=TwoWay}" FontSize="{StaticResource FieldFontSize}" />
             </StackLayout>
 
             <!-- Action column — when idiom is vertical it sits below; when horizontal it sits to the right -->
