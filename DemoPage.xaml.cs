@@ -14,10 +14,4 @@ public partial class DemoPage : ContentPage
         //_employeePage = employeePage;
         _dbService = dbService;
     }
-
-    private async void Button_Clicked(object sender, EventArgs e)
-    {
-        await Navigation.PushAsync(new EmployeePage(new ViewModels.EmployeeViewModel(_dbService)));
-		//await Navigation.PushAsync(_employeePage);
-    }
 }

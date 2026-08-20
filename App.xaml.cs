@@ -17,6 +17,8 @@ namespace MAUIAppTest
             //MainPage = _employeePage;
             //var NavPage = new NavigationPage(_employeePage);
             var NavPage = new NavigationPage(new DemoFlyOutPage(dbService));
+            //var NavPage = new NavigationPage(new DemoPage(dbService));
+
             NavPage.BarBackground = Colors.Green;
             NavPage.BarTextColor = Colors.Red;
 

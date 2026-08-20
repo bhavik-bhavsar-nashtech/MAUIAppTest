@@ -9,11 +9,10 @@ public partial class DemoFlyOutPage : FlyoutPage
 
         _dbService = dbService;
 
-        var employeePage =
-            new EmployeePage(
-                new ViewModels.EmployeeViewModel(_dbService));
+        
+        var welcomePage = new DemoPage(_dbService);
 
-        Detail = new NavigationPage(employeePage);
+        Detail = new NavigationPage(welcomePage);
     }
 
     private async void Button_Clicked(object sender, EventArgs e)
@@ -22,6 +21,29 @@ public partial class DemoFlyOutPage : FlyoutPage
         {
             await navigationPage.PushAsync(
                 new DemoPage(_dbService));
+        }
+    }
+
+    private async void EmployeeButton_Clicked(object sender, EventArgs e)
+    {
+        if (Detail is NavigationPage navigationPage)
+        {
+            var employeePage =
+                new EmployeePage(
+                    new ViewModels.EmployeeViewModel(_dbService));
+
+            await navigationPage.PushAsync(employeePage);
+            //await Navigation.PushAsync(new EmployeePage(new ViewModels.EmployeeViewModel(_dbService)));
+        }
+    }
+
+    private async void DepartmentButton_Clicked(object sender, EventArgs e)
+    {
+        if (Detail is NavigationPage navigationPage)
+        {
+            var demoPage = new DemoTabedPage();
+
+            await navigationPage.PushAsync(demoPage);
         }
     }
 }
