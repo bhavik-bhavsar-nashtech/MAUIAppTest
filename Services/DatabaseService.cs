@@ -14,9 +14,10 @@ public class DatabaseService
 
         //var dbPath = Path.Combine(FileSystem.AppDataDirectory, DbName);
         var dbPath = await GetDatabasePathAsync();
-        _database = new SQLiteAsyncConnection(dbPath);
-        await _database.CreateTableAsync<Employee>();
-        await _database.CreateTableAsync<Preference>();
+        	_database = new SQLiteAsyncConnection(dbPath);
+        	await _database.CreateTableAsync<Employee>();
+        	await _database.CreateTableAsync<Preference>();
+        	await _database.CreateTableAsync<Models.Department>();
     }
 
     private string GetDatabasePath2()
@@ -61,6 +62,12 @@ public class DatabaseService
     {
         await InitAsync();
         return await _database!.Table<Employee>().ToListAsync();
+    }
+
+    public async Task<List<Department>> GetDepartmentsAsync()
+    {
+        await InitAsync();
+        return await _database!.Table<Department>().ToListAsync();
     }
 
     public async Task<int> SaveEmployeeAsync(Employee employee)
@@ -115,4 +122,21 @@ public class DatabaseService
         if (existing is null) return 0;
         return await _database.DeleteAsync(existing);
     }
+
+    // Department helpers
+    public async Task<int> SaveDepartmentAsync(Models.Department dept)
+    {
+        await InitAsync();
+        if (dept.DepartmentID != 0)
+            return await _database!.UpdateAsync(dept);
+
+        return await _database!.InsertAsync(dept);
+    }
+
+    public async Task<int> DeleteDepartmentAsync(Models.Department dept)
+    {
+        await InitAsync();
+        return await _database!.DeleteAsync(dept);
+    }
+
 }

@@ -43,9 +43,10 @@ public partial class DemoFlyOutPage : FlyoutPage
     {
         if (Detail is NavigationPage navigationPage)
         {
-            var demoPage = new DemoTabedPage();
+            //var demoPage = new DemoTabedPage();
+            var deptPage = new DepartmentPage(new ViewModels.DepartmentViewModel(_dbService));
 
-            await navigationPage.PushAsync(demoPage);
+            await navigationPage.PushAsync(deptPage);
         }
     }
     

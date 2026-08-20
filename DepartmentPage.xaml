@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:MAUIAppTest.ViewModels"
+             xmlns:models="clr-namespace:MAUIAppTest.Models"
+             x:Name="DepartmentPageRoot"
+             x:Class="MAUIAppTest.DepartmentPage"
+             x:DataType="viewmodels:DepartmentViewModel"
+             Title="Department Management"
+             Padding="{OnIdiom Phone=10, Tablet=20, Desktop=30}">
+
+    <Grid RowDefinitions="Auto, Auto, *" ColumnDefinitions="*" RowSpacing="15">
+        <!--<Label Grid.Row="0" Text="Manage Departments" FontAttributes="Bold" HorizontalOptions="Center" />-->
+
+        <StackLayout Grid.Row="1" Spacing="10" Padding="10">
+            <Entry Placeholder="Department Name" Text="{Binding DepartmentName, Mode=TwoWay}" />
+            <Editor Placeholder="Department Detail" AutoSize="TextChanges" Text="{Binding DepartmentDetail, Mode=TwoWay}" />
+
+            <Picker Title="Department Head (optional)" ItemsSource="{Binding EmployeeNames}" SelectedItem="{Binding DepartmentHeadName, Mode=TwoWay}" />
+
+            <HorizontalStackLayout Spacing="10">
+                <Label Text="Active" VerticalOptions="Center" />
+                <Switch IsToggled="{Binding IsActive, Mode=TwoWay}" />
+            </HorizontalStackLayout>
+
+            <HorizontalStackLayout Spacing="10">
+                <Button Text="Clear" Command="{Binding ClearFormCommand}" />
+                <Button Text="Save Department" Command="{Binding SaveCommand}" BackgroundColor="Teal" TextColor="White" />
+            </HorizontalStackLayout>
+        </StackLayout>
+
+        <CollectionView Grid.Row="2" ItemsSource="{Binding Departments}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:Department">
+                    <Grid ColumnDefinitions="*, Auto" Padding="10">
+                        <VerticalStackLayout Grid.Column="0">
+                            <Label Text="{Binding DepartmentName}" FontAttributes="Bold" />
+                            <Label Text="{Binding DepartmentHeadName}" TextColor="DimGray" />
+                            <Label Text="{Binding DepartmentDetail}" TextColor="Gray" />
+                        </VerticalStackLayout>
+
+                        <HorizontalStackLayout Grid.Column="1" Spacing="5" VerticalOptions="Center">
+                            <Button Text="Edit" HeightRequest="35" Command="{Binding Source={x:Reference DepartmentPageRoot}, Path=BindingContext.SelectForEditCommand}" CommandParameter="{Binding .}" />
+                            <Button Text="X" HeightRequest="35" BackgroundColor="Red" TextColor="White" Command="{Binding Source={x:Reference DepartmentPageRoot}, Path=BindingContext.DeleteCommand}" CommandParameter="{Binding .}" />
+                        </HorizontalStackLayout>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>
