@@ -38,7 +38,7 @@
                     ImageSource="logout.svg"
                     ContentLayout="Left,10"
                     HeightRequest="30"
-                    Clicked="Button_Clicked"/>
+                    Clicked="LogoutButton_Clicked"/>
                 <FlexLayout>
                     <Label Text=" " HorizontalOptions="Center"></Label>                    
                 </FlexLayout>

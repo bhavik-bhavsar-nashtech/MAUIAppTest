@@ -7,20 +7,26 @@ namespace MAUIAppTest
         private readonly Services.DatabaseService _dbService;
         private readonly EmployeePage _employeePage;
 
-        public App(EmployeePage employeePage, Services.DatabaseService dbService)
+        private readonly LoginPage _loginPage;
+
+        public App(EmployeePage employeePage, Services.DatabaseService dbService, LoginPage loginPage)
         {
             InitializeComponent();
 
             _dbService = dbService;
             _employeePage = employeePage;
+            _loginPage = loginPage;
 
             //MainPage = _employeePage;
             //var NavPage = new NavigationPage(_employeePage);
-            var NavPage = new NavigationPage(new DemoFlyOutPage(dbService));
+            //var NavPage = new NavigationPage(new DemoFlyOutPage(dbService));
+            // We start with the LoginPage as the root. Successful login will replace MainPage.
+            // Keep a default NavPage reference for cases where other code expects a NavigationPage.
+            var NavPage = new NavigationPage(_loginPage);
             //var NavPage = new NavigationPage(new DemoPage(dbService));
 
-            NavPage.BarBackground = Colors.Green;
-            NavPage.BarTextColor = Colors.Red;
+            NavPage.BarBackground = Colors.Blue;
+            NavPage.BarTextColor = Colors.White;
 
             MainPage = NavPage;
             //MainPage = new DemoTabedPage();
