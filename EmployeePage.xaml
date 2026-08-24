@@ -17,7 +17,7 @@
             x:TypeArguments="Color">
                 <On Platform="Android" Value="#F7F7F7" />
                 <On Platform="iOS" Value="#FFFFFF" />
-                <On Platform="WinUI" Value="#EFEFEF" />
+                <On Platform="WinUI" Value="#87CEEB" />
             </OnPlatform>
 
             <!-- Idiom-based font sizes -->

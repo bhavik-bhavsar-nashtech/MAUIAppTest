@@ -7,6 +7,12 @@ public class DatabaseService
 {
     private SQLiteAsyncConnection? _database;
     private const string DbName = "EmployeeLocalDb.db3";
+    private readonly ErrorHandlingService _errorHandler;
+
+    public DatabaseService(ErrorHandlingService errorHandler)
+    {
+        _errorHandler = errorHandler;
+    }
 
     private async Task InitAsync()
     {
@@ -77,15 +83,41 @@ public class DatabaseService
         await SetPreferenceAsync("Last_Modified_Date", now);
 
         if (employee.Id != 0)
-            return await _database!.UpdateAsync(employee);
+        {
+            var res = await _database!.UpdateAsync(employee);
+            await _errorHandler.LogMessageAsync($"Employee updated: {employee.FullName} (Id={employee.Id})");
+            return res;
+        }
 
-        return await _database!.InsertAsync(employee);
+        var inserted = await _database!.InsertAsync(employee);
+        await _errorHandler.LogMessageAsync($"Employee created: {employee.FullName} (Id={inserted})");
+        return inserted;
     }
 
     public async Task<int> DeleteEmployeeAsync(Employee employee)
     {
         await InitAsync();
-        return await _database!.DeleteAsync(employee);
+        var res = await _database!.DeleteAsync(employee);
+        await _errorHandler.LogMessageAsync($"Employee deleted: {employee.FullName} (Id={employee.Id})");
+        return res;
+    }
+
+    // Expose a test method to validate centralized error logging
+    public async Task TestErrorLoggingAsync()
+    {
+        // Log a test message
+        await _errorHandler.LogMessageAsync("Test log from DatabaseService.TestErrorLoggingAsync");
+
+        // Optionally throw an exception to test exception logging
+        try
+        {
+            throw new InvalidOperationException("This is a test exception from DatabaseService.TestErrorLoggingAsync");
+        }
+        catch (Exception ex)
+        {
+            await _errorHandler.LogExceptionAsync(ex, "TestErrorLoggingAsync");
+            throw; // rethrow so caller can observe if desired
+        }
     }
 
     // Preference helpers
@@ -129,14 +161,19 @@ public class DatabaseService
     {
         await InitAsync();
         if (dept.DepartmentID != 0)
+        {
+            await _errorHandler.LogMessageAsync($"Department updated: {dept.DepartmentName} (Id={dept.DepartmentID})");
             return await _database!.UpdateAsync(dept);
+        }
 
+        await _errorHandler.LogMessageAsync($"Department created: {dept.DepartmentName} (Id={dept.DepartmentID})");
         return await _database!.InsertAsync(dept);
     }
 
     public async Task<int> DeleteDepartmentAsync(Models.Department dept)
     {
         await InitAsync();
+        await _errorHandler.LogMessageAsync($"Department deleted: {dept.DepartmentName} (Id={dept.DepartmentID})");
         return await _database!.DeleteAsync(dept);
     }
 }

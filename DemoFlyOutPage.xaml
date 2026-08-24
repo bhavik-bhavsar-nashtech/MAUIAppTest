@@ -34,6 +34,12 @@
                     HeightRequest="30"
                     Clicked="DepartmentButton_Clicked"/>
                 <Button
+                    Text="Exception"
+                    ImageSource="dotnet_bot.png"
+                    ContentLayout="Left,10"
+                    HeightRequest="30"
+                    Clicked="ExceptionButton_Clicked"/>
+                <Button
                     Text="Logout"
                     ImageSource="logout.svg"
                     ContentLayout="Left,10"

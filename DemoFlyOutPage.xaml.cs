@@ -63,4 +63,10 @@ public partial class DemoFlyOutPage : FlyoutPage
             Application.Current.MainPage = nav;
         });
     }
+
+    private async void ExceptionButton_Clicked(object sender, EventArgs e)
+    {
+        // Ensure UI update on the main thread and replace the app's MainPage
+        _dbService.TestErrorLoggingAsync();
+    }    
 }

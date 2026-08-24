@@ -57,4 +57,24 @@ public class ErrorHandlingService
         }
         catch { }
     }
+
+    // Helper to quickly test logging from UI/pages without throwing
+    public async Task TestLogAsync(string message)
+    {
+        await LogMessageAsync(message);
+    }
+
+    // Helper to test exception logging path. Caller may observe the thrown exception.
+    public async Task TestExceptionAsync()
+    {
+        try
+        {
+            throw new InvalidOperationException("Test exception from ErrorHandlingService.TestExceptionAsync");
+        }
+        catch (Exception ex)
+        {
+            await LogExceptionAsync(ex, "TestExceptionAsync");
+            throw;
+        }
+    }
 }
