@@ -28,9 +28,11 @@ namespace MAUIAppTest
 
             // 2. MVVM Processing Engine Registration
             builder.Services.AddTransient<ViewModels.EmployeeViewModel>();
+            builder.Services.AddTransient<ViewModels.DepartmentViewModel>();
 
             // 3. UI Presentation Layer Registration
             builder.Services.AddTransient<EmployeePage>();
+            builder.Services.AddTransient<DepartmentPage>();
             builder.Services.AddTransient<LoginPage>();
 
             builder.ConfigureLifecycleEvents(events =>

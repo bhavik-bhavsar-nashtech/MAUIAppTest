@@ -17,6 +17,8 @@ public class DatabaseService
         _database = new SQLiteAsyncConnection(dbPath);
         await _database.CreateTableAsync<Employee>();
         await _database.CreateTableAsync<Preference>();
+        await _database.CreateTableAsync<Department>();
+
     }
 
     private string GetDatabasePath2()
@@ -114,5 +116,27 @@ public class DatabaseService
         var existing = await _database!.FindAsync<Preference>(key);
         if (existing is null) return 0;
         return await _database.DeleteAsync(existing);
+    }
+
+    public async Task<List<Department>> GetDepartmentsAsync()
+    {
+        await InitAsync();
+        return await _database!.Table<Department>().ToListAsync();
+    }
+
+    // Department helpers
+    public async Task<int> SaveDepartmentAsync(Models.Department dept)
+    {
+        await InitAsync();
+        if (dept.DepartmentID != 0)
+            return await _database!.UpdateAsync(dept);
+
+        return await _database!.InsertAsync(dept);
+    }
+
+    public async Task<int> DeleteDepartmentAsync(Models.Department dept)
+    {
+        await InitAsync();
+        return await _database!.DeleteAsync(dept);
     }
 }
