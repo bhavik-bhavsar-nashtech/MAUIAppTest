@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MAUIAppTest.DeviceCapabilityPage"
+             Title="Device Capabilities">
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="12">
+            <Label Text="Device Capabilities Demo" FontAttributes="Bold" />
+
+            <Button Text="Take Photo" Clicked="TakePhoto_Clicked" />
+            <Image x:Name="PhotoImage" HeightRequest="200" Aspect="AspectFill" />
+
+            <Button Text="Get Location" Clicked="GetLocation_Clicked" />
+            <Label x:Name="LocationLabel" />
+
+            <Button Text="Start Accelerometer" Clicked="StartAccel_Clicked" />
+            <Button Text="Stop Accelerometer" Clicked="StopAccel_Clicked" />
+            <Label x:Name="AccelLabel" />
+
+            <Button Text="Save Secure Value" Clicked="SaveSecure_Clicked" />
+            <Button Text="Read Secure Value" Clicked="ReadSecure_Clicked" />
+            <Label x:Name="SecureLabel" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

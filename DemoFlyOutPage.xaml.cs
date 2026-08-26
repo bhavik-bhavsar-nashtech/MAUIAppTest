@@ -67,6 +67,28 @@ public partial class DemoFlyOutPage : FlyoutPage
     private async void ExceptionButton_Clicked(object sender, EventArgs e)
     {
         // Ensure UI update on the main thread and replace the app's MainPage
-        _dbService.TestErrorLoggingAsync();
+        try
+        {
+            await _dbService.TestErrorLoggingAsync();
+        }
+        catch
+        {
+            // swallow - test method rethrows after logging; we ignore here
+        }
     }    
+
+    private async void DeviceButton_Clicked(object sender, EventArgs e)
+    {
+        if (Detail is NavigationPage navigationPage)
+        {
+            // Resolve page from DI if available
+            var page = App.ServiceProvider?.GetService(typeof(DeviceCapabilityPage)) as DeviceCapabilityPage;
+            if (page is null)
+            {
+                var eh = App.ServiceProvider?.GetService(typeof(Services.ErrorHandlingService)) as Services.ErrorHandlingService;
+                page = new DeviceCapabilityPage(eh!);
+            }
+            await navigationPage.PushAsync(page);
+        }
+    }
 }

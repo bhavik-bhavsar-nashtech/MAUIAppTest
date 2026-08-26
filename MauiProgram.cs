@@ -33,6 +33,7 @@ namespace MAUIAppTest
             // 3. UI Presentation Layer Registration
             builder.Services.AddTransient<EmployeePage>();
             builder.Services.AddTransient<DepartmentPage>();
+            builder.Services.AddTransient<DeviceCapabilityPage>();
             builder.Services.AddTransient<LoginPage>();
 
             builder.ConfigureLifecycleEvents(events =>

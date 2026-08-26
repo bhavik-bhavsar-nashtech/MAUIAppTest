@@ -40,6 +40,12 @@
                     HeightRequest="30"
                     Clicked="ExceptionButton_Clicked"/>
                 <Button
+                    Text="Device"
+                    ImageSource="devices.svg"
+                    ContentLayout="Left,10"
+                    HeightRequest="30"
+                    Clicked="DeviceButton_Clicked"/>
+                <Button
                     Text="Logout"
                     ImageSource="logout.svg"
                     ContentLayout="Left,10"

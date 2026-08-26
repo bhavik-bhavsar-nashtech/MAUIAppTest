@@ -4,6 +4,7 @@ namespace MAUIAppTest
 {
     public partial class App : Application
     {
+        public static IServiceProvider? ServiceProvider { get; private set; }
         private readonly Services.DatabaseService _dbService;
         private readonly EmployeePage _employeePage;
 
@@ -35,6 +36,9 @@ namespace MAUIAppTest
 
             // Fire-and-forget apply saved theme at construction (will not block startup)
             _ = ApplySavedThemeAsync();
+
+            // expose service provider for simple resolution from pages
+            ServiceProvider = this.Handler?.MauiContext?.Services;
 
             // Global exception handlers for non-UI and UI thread exceptions
             AppDomain.CurrentDomain.UnhandledException += async (s, e) =>
