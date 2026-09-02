@@ -1,3 +1,4 @@
+using System.IO;
 using Microsoft.Maui.Devices.Sensors;
 using Microsoft.Maui.Storage;
 using Microsoft.Maui.ApplicationModel;
@@ -34,10 +35,23 @@ public partial class DeviceCapabilityPage : ContentPage
             var photo = await MediaPicker.Default.CapturePhotoAsync();
             if (photo is null) return;
 
-            var stream = await photo.OpenReadAsync();
-            PhotoImage.Source = ImageSource.FromStream(() => stream);
+            // Save the captured photo to app data and display it
+            using var sourceStream = await photo.OpenReadAsync();
+            var fileName = photo.FileName;
+            if (string.IsNullOrWhiteSpace(fileName))
+                fileName = $"photo_{DateTime.UtcNow:yyyyMMddHHmmss}.jpg";
 
-            if (_eh != null) await _eh.LogMessageAsync("Photo captured via DeviceCapabilityPage");
+            var destPath = Path.Combine(FileSystem.AppDataDirectory, fileName);
+            // Overwrite if exists
+            using (var destStream = File.Create(destPath))
+            {
+                await sourceStream.CopyToAsync(destStream);
+            }
+
+            PhotoImage.Source = ImageSource.FromFile(destPath);
+            PhotoPathLabel.Text = destPath;
+
+            if (_eh != null) await _eh.LogMessageAsync($"Photo captured and saved: {destPath}");
         }
         catch (Exception ex)
         {
