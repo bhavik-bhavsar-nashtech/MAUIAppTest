@@ -1,9 +1,16 @@
+using System;
 using System.IO;
 using Microsoft.Maui.Devices.Sensors;
 using Microsoft.Maui.Storage;
 using Microsoft.Maui.ApplicationModel;
 using Microsoft.Maui.Media;
 using Microsoft.Extensions.DependencyInjection;
+#nullable enable
+using ZXing;
+using ZXing.Common;
+#if ANDROID
+using Android.Graphics;
+#endif
 
 namespace MAUIAppTest;
 
@@ -11,15 +18,11 @@ public partial class DeviceCapabilityPage : ContentPage
 {
     private readonly Services.ErrorHandlingService? _eh;
 
-    public DeviceCapabilityPage(Services.ErrorHandlingService errorHandler) : base()
+    public DeviceCapabilityPage(Services.ErrorHandlingService errorHandler)
     {
         InitializeComponent();
         _eh = errorHandler;
     }
-
-    // Constructor with no parameters is removed to ensure only DI is used
-    // XAML-defined controls will be used directly
-    // Ensure to use named controls from XAML for event handling
 
     private async void TakePhoto_Clicked(object sender, EventArgs e)
     {
@@ -35,14 +38,12 @@ public partial class DeviceCapabilityPage : ContentPage
             var photo = await MediaPicker.Default.CapturePhotoAsync();
             if (photo is null) return;
 
-            // Save the captured photo to app data and display it
             using var sourceStream = await photo.OpenReadAsync();
             var fileName = photo.FileName;
             if (string.IsNullOrWhiteSpace(fileName))
                 fileName = $"photo_{DateTime.UtcNow:yyyyMMddHHmmss}.jpg";
 
-            var destPath = Path.Combine(FileSystem.AppDataDirectory, fileName);
-            // Overwrite if exists
+            var destPath = System.IO.Path.Combine(FileSystem.AppDataDirectory, fileName);
             using (var destStream = File.Create(destPath))
             {
                 await sourceStream.CopyToAsync(destStream);
@@ -52,12 +53,75 @@ public partial class DeviceCapabilityPage : ContentPage
             PhotoPathLabel.Text = destPath;
 
             if (_eh != null) await _eh.LogMessageAsync($"Photo captured and saved: {destPath}");
+            // Clear previous scan result
+            ScanResultLabel.Text = string.Empty;
         }
         catch (Exception ex)
         {
             if (_eh != null) await _eh.LogExceptionAsync(ex, "TakePhoto_Clicked");
             await DisplayAlert("Error", ex.Message, "OK");
         }
+    }
+
+    private async void ScanFromImage_Clicked(object sender, EventArgs e)
+    {
+        try
+        {
+            var path = PhotoPathLabel.Text;
+            if (string.IsNullOrWhiteSpace(path) || !File.Exists(path))
+            {
+                await DisplayAlert("Scan", "No saved photo to scan. Capture an image first.", "OK");
+                return;
+            }
+
+#if ANDROID
+            var bitmap = BitmapFactory.DecodeFile(path);
+            if (bitmap is null)
+            {
+                await DisplayAlert("Scan", "Failed to load image for scanning", "OK");
+                return;
+            }
+
+            try
+            {
+                int width = bitmap.Width;
+                int height = bitmap.Height;
+                var pixels = new int[width * height];
+                bitmap.GetPixels(pixels, 0, width, 0, 0, width, height);
+
+                // Convert ARGB int[] to RGB byte[] (R,G,B per pixel)
+                var rgb = new byte[width * height * 3];
+                for (int i = 0, j = 0; i < pixels.Length; i++, j += 3)
+                {
+                    int p = pixels[i];
+                    rgb[j] = (byte)((p >> 16) & 0xFF);
+                    rgb[j + 1] = (byte)((p >> 8) & 0xFF);
+                    rgb[j + 2] = (byte)(p & 0xFF);
+                }
+
+                var luminanceSource = new RGBLuminanceSource(rgb, width, height);
+                var binaryBitmap = new BinaryBitmap(new HybridBinarizer(luminanceSource));
+                var reader = new MultiFormatReader();
+                var result = reader.decode(binaryBitmap);
+
+                ScanResultLabel.Text = result?.Text ?? "No barcode/QR found";
+                if (_eh != null) await _eh.LogMessageAsync($"Scan result: {ScanResultLabel.Text}");
+            }
+            finally
+            {
+                bitmap.Recycle();
+                bitmap.Dispose();
+            }
+#else
+            await DisplayAlert("Scan", "Image scanning currently supported on Android builds only.", "OK");
+#endif
+        }
+        catch (Exception ex)
+        {
+            _ = _eh?.LogExceptionAsync(ex, "ScanFromImage_Clicked");
+            await DisplayAlert("Error", ex.Message, "OK");
+        }
+
     }
 
     private async void GetLocation_Clicked(object sender, EventArgs e)

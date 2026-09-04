@@ -10,6 +10,8 @@
             <Button Text="Take Photo" Clicked="TakePhoto_Clicked" />
             <Image x:Name="PhotoImage" HeightRequest="200" Aspect="AspectFill" />
             <Label x:Name="PhotoPathLabel" FontSize="12" TextColor="Gray" />
+            <Button Text="Scan Barcode/Qr from Image" Clicked="ScanFromImage_Clicked" />
+            <Label x:Name="ScanResultLabel" />
 
             <Button Text="Get Location" Clicked="GetLocation_Clicked" />
             <Label x:Name="LocationLabel" />
